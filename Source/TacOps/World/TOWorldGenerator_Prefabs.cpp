@@ -600,12 +600,12 @@ void ATOWorldGenerator::BuildWarehouse(const FVector& Center, float Yaw, float W
 
 	const ETOMat Ext = Rng.FRand() < 0.5f ? ETOMat::MetalBlue : ETOMat::Aluminium;
 	// Lower concrete band + corrugated upper walls with clerestory windows
-	auto WallSet = [&](const FVector2D& A, const FVector2D& B, float Len, TArray<FTOOpening> Doors)
+	auto WallSet = [&](const FVector2D& A, const FVector2D& B, float Len, TArray<FTOOpening> Openings)
 	{
-		TArray<FTOOpening> Lower = Doors;
+		TArray<FTOOpening> Lower = Openings;
 		Wall(F, A, B, 0.f, 250.f, T, ETOMat::Concrete, Lower);
 		TArray<FTOOpening> Upper;
-		for (const FTOOpening& O : Doors)
+		for (const FTOOpening& O : Openings)
 		{
 			if (O.Top > 250.f)
 			{
@@ -615,7 +615,7 @@ void ATOWorldGenerator::BuildWarehouse(const FVector& Center, float Yaw, float W
 		for (float C = 300.f; C < Len - 300.f; C += 600.f)
 		{
 			bool bClash = false;
-			for (const FTOOpening& O : Doors)
+			for (const FTOOpening& O : Openings)
 			{
 				bClash |= FMath::Abs(O.Center - C) < O.Width * 0.5f + 200.f;
 			}
@@ -1322,18 +1322,18 @@ void ATOWorldGenerator::BuildPowerStation(const FVector& Center, float Yaw, int3
 	Box(F, FVector(0.f, 0.f, -5.f), FVector(W, D, 10.f), ETOMat::Tile);
 
 	// Walls: concrete base, glazed band, upper concrete
-	auto HallWall = [&](const FVector2D& A, const FVector2D& B, float Len, const TArray<FTOOpening>& Doors)
+	auto HallWall = [&](const FVector2D& A, const FVector2D& B, float Len, const TArray<FTOOpening>& Openings)
 	{
-		Wall(F, A, B, 0.f, 700.f, T, ETOMat::ConcreteLight, Doors);
+		Wall(F, A, B, 0.f, 700.f, T, ETOMat::ConcreteLight, Openings);
 		TArray<FTOOpening> Band;
-		for (const FTOOpening& O : Doors)
+		for (const FTOOpening& O : Openings)
 		{
 			if (O.Top > 700.f) Band.Add(FTOOpening(O.Center, O.Width, 0.f, O.Top - 700.f));
 		}
 		for (float C = 500.f; C < Len - 400.f; C += 900.f)
 		{
 			bool bClash = false;
-			for (const FTOOpening& O : Doors) bClash |= FMath::Abs(O.Center - C) < O.Width * 0.5f + 350.f;
+			for (const FTOOpening& O : Openings) bClash |= FMath::Abs(O.Center - C) < O.Width * 0.5f + 350.f;
 			if (!bClash) Band.Add(FTOOpening(C, 600.f, 400.f, 1000.f));
 		}
 		Wall(F, A, B, 700.f, H - 700.f, T, ETOMat::ConcreteDam, Band);

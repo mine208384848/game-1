@@ -176,7 +176,7 @@ public:
 	float LastDamagedTime = -100.f;
 	float DeathTime = -1.f;
 
-	/** Vehicle the character currently drives (if any). */
+	/** Vehicle the character currently drives (hook for a future vehicle system; always empty for now). */
 	TWeakObjectPtr<ATOVehicle> CurrentVehicle;
 
 protected:

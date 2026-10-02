@@ -392,7 +392,7 @@ bool ATOHUD::ProjectRef(const FVector& World, FVector2D& Out) const
 	{
 		return false;
 	}
-	const FVector P = Canvas->Project(World, false);
+	const FVector P = Canvas->Project(World);
 	if (P.Z <= 0.f)
 	{
 		return false;

@@ -473,7 +473,7 @@ void ATOWorldGenerator::FinalizeBatches()
 			break;
 		}
 		const FTOMatInfo& Info = UTOMaterialLibrary::GetInfo(Mat);
-		const bool bVegetation = Info.Surface == FName(TEXT("Foliage")) || Mat == ETOMat::Bark;
+		const bool bVegetation = FName(Info.Surface) == FName(TEXT("Foliage")) || Mat == ETOMat::Bark;
 		if (bVegetation)
 		{
 			H->SetCullDistances(110000, 140000);

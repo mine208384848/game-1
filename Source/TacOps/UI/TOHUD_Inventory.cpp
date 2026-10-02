@@ -16,18 +16,6 @@
 
 namespace
 {
-	const TCHAR* GearLabel(ETOItemCategory Cat)
-	{
-		switch (Cat)
-		{
-		case ETOItemCategory::Helmet: return TEXT("Helmet");
-		case ETOItemCategory::Armor: return TEXT("Body armor");
-		case ETOItemCategory::Rig: return TEXT("Chest rig");
-		case ETOItemCategory::Backpack: return TEXT("Backpack");
-		default: return TEXT("");
-		}
-	}
-
 	bool IsGear(ETOItemCategory Cat)
 	{
 		return Cat == ETOItemCategory::Helmet || Cat == ETOItemCategory::Armor || Cat == ETOItemCategory::Rig || Cat == ETOItemCategory::Backpack;
@@ -397,8 +385,8 @@ void ATOHUD::DrawWeaponSlot(float X, float Y, float W, float H, int32 Slot, cons
 		Text(TEXT("EMPTY"), X + W * 0.5f, Y + H * 0.5f - 6.f, 15.f, FLinearColor(1.f, 1.f, 1.f, 0.25f), ETOAlign::Center);
 		return;
 	}
-	const FTOWeaponSlot& S = Wc->GetSlot(Slot);
-	const FTOWeaponDef* D = TODB::FindWeapon(S.Config.WeaponId);
+	const FTOWeaponSlot& WS = Wc->GetSlot(Slot);
+	const FTOWeaponDef* D = TODB::FindWeapon(WS.Config.WeaponId);
 	FTOItemRef Ref;
 	Ref.Source = FTOItemRef::WeaponSlot;
 	Ref.Index = Slot;
@@ -411,11 +399,11 @@ void ATOHUD::DrawWeaponSlot(float X, float Y, float W, float H, int32 Slot, cons
 	const bool bActive = Wc->GetActiveSlotIndex() == Slot;
 	Text(D ? D->Name : FString(TEXT("?")), X + 8.f, Y + 24.f, 22.f, bActive ? TOStyle::Accent : TOStyle::Text);
 	int32 NumAtt = 0;
-	for (const FName& A : S.Config.Attachments)
+	for (const FName& A : WS.Config.Attachments)
 	{
 		NumAtt += A.IsNone() ? 0 : 1;
 	}
-	Text(FString::Printf(TEXT("%s  -  %d / %d  T%d  -  %d attachments"), D ? TODB::CaliberName(D->Caliber) : TEXT("-"), S.MagAmmo, TODB::ComputeStats(S.Config).MagSize, S.LoadedTier, NumAtt),
+	Text(FString::Printf(TEXT("%s  -  %d / %d  T%d  -  %d attachments"), D ? TODB::CaliberName(D->Caliber) : TEXT("-"), WS.MagAmmo, TODB::ComputeStats(WS.Config).MagSize, WS.LoadedTier, NumAtt),
 		X + 8.f, Y + 56.f, 13.f, TOStyle::Dim);
 	Region(X, Y, W, H, [this, Ref]() { OpenItemMenu(Ref); }, [this, Ref]() { ItemQuickMove(Ref); });
 }
@@ -589,7 +577,8 @@ void ATOHUD::DrawContextMenu()
 		}
 		const FTOWeaponDef* D = TODB::FindWeapon(W->GetSlot(Ref.Index).Config.WeaponId);
 		Title = D ? D->Name : FString(TEXT("Weapon"));
-		Entries.Add({ TEXT("Equip (hold in hands)"), [C, Ref]() { C->InputSelectWeapon(Ref.Index); } });
+		TWeakObjectPtr<ATOCharacter> WeakChar = C;
+		Entries.Add({ TEXT("Equip (hold in hands)"), [WeakChar, Ref]() { if (ATOCharacter* Ch = WeakChar.Get()) { Ch->InputSelectWeapon(Ref.Index); } } });
 		Entries.Add({ bLootOpen ? TEXT("Put into container") : TEXT("Unequip to bag"), [this, Ref, bLootOpen]() { if (bLootOpen) ItemStore(Ref); else ItemTake(Ref); } });
 		Entries.Add({ TEXT("Drop"), [this, Ref]() { ItemDrop(Ref); } });
 	}

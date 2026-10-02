@@ -802,7 +802,7 @@ void ATOWorldGenerator::BuildDamValley(FRandomStream& Rng)
 		const int32 Idx = Rng.RandRange(1, R.Points.Num() - 2);
 		const FVector2D Dir = (R.Points[Idx + 1] - R.Points[Idx - 1]).GetSafeNormal();
 		const FVector2D Side(-Dir.Y, Dir.X);
-		const FVector2D P = R.Points[Idx] + Side * (R.Width * 0.5f + Rng.FRandRange(150.f, 500.f)) * (Rng.RandBool() ? 1.f : -1.f);
+		const FVector2D P = R.Points[Idx] + Side * (R.Width * 0.5f + Rng.FRandRange(150.f, 500.f)) * (Rng.FRand() < 0.5f ? 1.f : -1.f);
 		const float Yaw = FMath::RadiansToDegrees(FMath::Atan2(Dir.Y, Dir.X)) + Rng.FRandRange(-25.f, 25.f);
 		BuildVehicle(OnGround(P.X, P.Y), Yaw, Rng.RandRange(0, 3), Rng);
 		if (Rng.FRand() < 0.4f)
