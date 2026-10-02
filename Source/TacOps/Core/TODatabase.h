@@ -59,6 +59,8 @@ namespace TODB
 
 	// Loadout / economy ------------------------------------------------------------------
 	int64 LoadoutCost(const FTOLoadout& Loadout, bool bIncludePrimary = true);
+	/** Free starter kit for Operations (nothing to lose, nothing paid). */
+	FTOLoadout MakeFreeKit(ETOOperator Op);
 	int64 AmmoCost(FName Caliber, int32 Tier, int32 Rounds);
 	void GetMedKit(int32 MedTier, TArray<FName>& OutItems);
 	const TCHAR* MedKitName(int32 MedTier);

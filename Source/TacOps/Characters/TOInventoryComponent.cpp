@@ -345,6 +345,29 @@ FTOItemInstance* UTOInventoryComponent::GetGearSlot(ETOItemCategory Category)
 	}
 }
 
+bool UTOInventoryComponent::UnequipGear(ETOItemCategory Category, FTOItemInstance& OutItem, TArray<FTOItemInstance>& OutContents)
+{
+	FTOItemInstance* Slot = GetGearSlot(Category);
+	if (!Slot || !Slot->IsValid())
+	{
+		return false;
+	}
+	OutItem = *Slot;
+	*Slot = FTOItemInstance();
+	if (Category == ETOItemCategory::Rig)
+	{
+		OutContents.Append(Rig.Items);
+		Rig.Init(FName(TEXT("Chest Rig")), 0, 0);
+	}
+	else if (Category == ETOItemCategory::Backpack)
+	{
+		OutContents.Append(Backpack.Items);
+		Backpack.Init(FName(TEXT("Backpack")), 0, 0);
+	}
+	MarkDirty();
+	return true;
+}
+
 void UTOInventoryComponent::ResizeGridFromItem(FTOGrid& Grid, const FTOItemInstance& Item, FName GridName, TArray<FTOItemInstance>& OutOverflow)
 {
 	const TArray<FTOItemInstance> OldItems = Grid.Items;

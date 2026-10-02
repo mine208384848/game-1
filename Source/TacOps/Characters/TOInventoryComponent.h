@@ -62,6 +62,8 @@ public:
 	/** Equips armor / helmet / rig / backpack. Previously equipped gear and overflowing items go to OutDisplaced. */
 	bool EquipGear(const FTOItemInstance& Item, TArray<FTOItemInstance>& OutDisplaced);
 	FTOItemInstance* GetGearSlot(ETOItemCategory Category);
+	/** Takes off a gear piece. Rig / backpack contents are moved to OutContents. */
+	bool UnequipGear(ETOItemCategory Category, FTOItemInstance& OutItem, TArray<FTOItemInstance>& OutContents);
 
 	int64 GetTotalValue(bool bIncludeSafe, bool bIncludeGear) const;
 	void CollectAll(TArray<FTOItemInstance>& Out, bool bIncludeSafe, bool bIncludeGear) const;

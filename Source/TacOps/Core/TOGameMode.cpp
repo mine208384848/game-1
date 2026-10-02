@@ -665,6 +665,10 @@ ATOCharacter* ATOGameMode::SpawnPlayer(const FVector& Location, float Yaw)
 	UTOGameInstance* GI = UTOGameInstance::Get(this);
 	UTOSaveGame* Save = GI ? GI->GetSave() : nullptr;
 	FTOLoadout L = Session.Loadout;
+	if (Mode == ETOMatchMode::Operations && Session.bFreeKit)
+	{
+		L = TODB::MakeFreeKit(L.Operator);
+	}
 	if (Mode == ETOMatchMode::Warfare)
 	{
 		L.ArmorLevel = 4;

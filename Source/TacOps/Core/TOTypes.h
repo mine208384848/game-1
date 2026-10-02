@@ -495,6 +495,8 @@ struct FTOSession
 	UPROPERTY() int32 WarfareSide = 0;      // 0 attack, 1 defend
 	UPROPERTY() int32 Seed = 1337;
 	UPROPERTY() bool bDeploy = false;
+	/** Operations: deploy with the free starter kit instead of the paid loadout. */
+	UPROPERTY() bool bFreeKit = false;
 	UPROPERTY() FTOLoadout Loadout;
 };
 

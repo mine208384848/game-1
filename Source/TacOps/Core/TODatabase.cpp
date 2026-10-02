@@ -1267,6 +1267,24 @@ namespace TODB
 		return Cost;
 	}
 
+	FTOLoadout MakeFreeKit(ETOOperator Op)
+	{
+		FTOLoadout L;
+		L.Operator = Op;
+		L.Primary = MakeDefaultConfig(FName(TEXT("MP5")), 2);
+		L.Sidearm = MakeDefaultConfig(FName(TEXT("G17")), 1);
+		L.ArmorLevel = 2;
+		L.HelmetLevel = 1;
+		L.RigTier = 1;
+		L.BackpackTier = 1;
+		L.MedTier = 0;
+		L.Frags = 0;
+		L.Smokes = 1;
+		L.Flashes = 0;
+		L.SpareMags = 3;
+		return L;
+	}
+
 	ETORarity RollRarity(int32 Tier, FRandomStream& Rng)
 	{
 		static const float Base[6] = { 50.f, 28.f, 14.f, 6.f, 1.6f, 0.35f };
